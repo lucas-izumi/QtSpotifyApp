@@ -1,11 +1,10 @@
 #include "spotifyapp.h"
-
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    SpotifyApp w;
-    w.show();
+    SpotifyApp app;
+    app.show();
     return a.exec();
 }

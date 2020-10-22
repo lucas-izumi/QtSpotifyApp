@@ -2,6 +2,7 @@
 #define SPOTIFYAPP_H
 
 #include <QMainWindow>
+#include <QOAuth2AuthorizationCodeFlow>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SpotifyApp; }
@@ -17,5 +18,16 @@ public:
 
 private:
     Ui::SpotifyApp *ui;
+
+    void setupConnection();
+    void granted();
+    void authStatusChanged (QAbstractOAuth::Status status);
+    void connectToSpotify();
+    void readConfig();
+
+    QOAuth2AuthorizationCodeFlow spotify;
+    bool isGranted;
+    QString ClientID;
+    QString ClientIDSharedKey;
 };
 #endif // SPOTIFYAPP_H
