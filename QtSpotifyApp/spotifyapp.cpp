@@ -3,6 +3,7 @@
 #include "config.h"
 #include <QDesktopServices>
 #include <QtNetworkAuth>
+#include <QUrl>
 
 SpotifyApp::SpotifyApp(QWidget *parent)
     : QMainWindow(parent)
@@ -67,24 +68,57 @@ void SpotifyApp::readConfig()
     ClientIDSharedKey = settings.value("sharedkey").toString();
 }
 
-void SpotifyApp::search()
+void SpotifyApp::search(QString searchString)
 {
-    QUrl requestURL ("https://api.spotify.com/v1/search?q=tania%20bowra&type=artist");
+    //types = "&type=album,artist,playlist,track,show,episode";
+    QString types = "&type=track";
+    QUrl requestURL ("https://api.spotify.com/v1/search?q=" + searchString + types);
+
+    ui->lstResultadosBusca->clear();
+    searchMap.clear();
 
     auto reply = spotify.get(requestURL);
 
     connect(reply, &QNetworkReply::finished, [=]() {
-        if (reply->error() != QNetworkReply::NoError) {
+        if (reply->error() != QNetworkReply::NoError)
+        {
             qDebug() << reply->errorString();
             return;
         }
         const auto data = reply->readAll();
-        qDebug() << data;
+        //qDebug() << data;
 
         const auto document = QJsonDocument::fromJson(data);
         const auto jsonObj = document.object();
+        //qDebug() << jsonObj.keys(); //("tracks")
 
-        //Apaga a resposta HTTP no proximo loop de eventos
+        QJsonObject finalObject = jsonObj["tracks"].toObject();
+        //qDebug() << finalObject.keys(); //("href", "items", "limit", "next", "offset", "previous", "total")
+
+        QJsonArray jsonArray = finalObject["items"].toArray();
+        int cont = 0;
+        foreach (const QJsonValue & value, jsonArray)
+        {
+            QJsonObject obj = value.toObject();
+            //qDebug() << "Name: " + obj["name"].toString() + ", URL: " + obj["preview_url"].toString();
+            ui->lstResultadosBusca->addItem(obj["name"].toString());
+            searchMap.insert(cont++, obj["preview_url"].toString());
+        }
+
         reply->deleteLater();
     });
+}
+
+void SpotifyApp::on_lstResultadosBusca_itemDoubleClicked(QListWidgetItem *item)
+{
+    ui->lstPlaylist->addItem(item->clone());
+    //qDebug() << ui->lstResultadosBusca->currentRow();
+    QString element = searchMap[ui->lstResultadosBusca->currentRow()];
+    playListUrls.push_back(element);
+
+}
+
+void SpotifyApp::on_btnBuscar_clicked()
+{
+    search(ui->txtBuscar->toPlainText());
 }
