@@ -2,6 +2,7 @@
 #include "ui_spotifyapp.h"
 #include "config.h"
 #include "macros.h"
+#include "downloader.h"
 #include <QDesktopServices>
 #include <QtNetworkAuth>
 #include <QUrl>
