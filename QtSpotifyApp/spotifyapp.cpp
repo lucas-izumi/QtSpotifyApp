@@ -136,9 +136,13 @@ void SpotifyApp::on_btnAdicionar_clicked()
 
 void SpotifyApp::addToPlaylist(QListWidgetItem * item)
 {
-    ui->lstPlaylist->addItem(item);
     QString element = searchMap[ui->lstResultadosBusca->currentRow()];
-    playListUrls.push_back(element);
+
+    if (!playListUrls.contains(element))
+    {
+        ui->lstPlaylist->addItem(item);
+        playListUrls.push_back(element);
+    }
 }
 
 void SpotifyApp::updateAddButton()
