@@ -111,14 +111,22 @@ void SpotifyApp::search(QString searchString)
 
 void SpotifyApp::on_lstResultadosBusca_itemDoubleClicked(QListWidgetItem *item)
 {
-    ui->lstPlaylist->addItem(item->clone());
-    //qDebug() << ui->lstResultadosBusca->currentRow();
-    QString element = searchMap[ui->lstResultadosBusca->currentRow()];
-    playListUrls.push_back(element);
-
+    addToPlaylist(item->clone());
 }
 
 void SpotifyApp::on_btnBuscar_clicked()
 {
     search(ui->txtBuscar->toPlainText());
+}
+
+void SpotifyApp::on_btnAdicionar_clicked()
+{
+    addToPlaylist(ui->lstResultadosBusca->currentItem()->clone());
+}
+
+void SpotifyApp::addToPlaylist(QListWidgetItem * item)
+{
+    ui->lstPlaylist->addItem(item);
+    QString element = searchMap[ui->lstResultadosBusca->currentRow()];
+    playListUrls.push_back(element);
 }

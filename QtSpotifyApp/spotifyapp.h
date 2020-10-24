@@ -22,6 +22,8 @@ private slots:
 
     void on_btnBuscar_clicked();
 
+    void on_btnAdicionar_clicked();
+
 private:
     Ui::SpotifyApp *ui;
     QMap<int, QString> searchMap;
@@ -33,6 +35,8 @@ private:
     void connectToSpotify();
     void readConfig();
     void search(QString searchString);
+
+    void addToPlaylist(QListWidgetItem * item);
 
     QOAuth2AuthorizationCodeFlow spotify;
     bool isGranted;
