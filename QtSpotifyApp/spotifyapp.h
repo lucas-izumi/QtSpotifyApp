@@ -24,6 +24,7 @@ private:
     void authStatusChanged (QAbstractOAuth::Status status);
     void connectToSpotify();
     void readConfig();
+    void search();
 
     QOAuth2AuthorizationCodeFlow spotify;
     bool isGranted;

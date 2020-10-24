@@ -66,3 +66,25 @@ void SpotifyApp::readConfig()
     ClientID = settings.value("clientid").toString();
     ClientIDSharedKey = settings.value("sharedkey").toString();
 }
+
+void SpotifyApp::search()
+{
+    QUrl requestURL ("https://api.spotify.com/v1/search?q=tania%20bowra&type=artist");
+
+    auto reply = spotify.get(requestURL);
+
+    connect(reply, &QNetworkReply::finished, [=]() {
+        if (reply->error() != QNetworkReply::NoError) {
+            qDebug() << reply->errorString();
+            return;
+        }
+        const auto data = reply->readAll();
+        qDebug() << data;
+
+        const auto document = QJsonDocument::fromJson(data);
+        const auto jsonObj = document.object();
+
+        //Apaga a resposta HTTP no proximo loop de eventos
+        reply->deleteLater();
+    });
+}
