@@ -14,6 +14,7 @@ SOURCES += \
 
 HEADERS += \
     config.h \
+    macros.h \
     spotifyapp.h
 
 FORMS += \

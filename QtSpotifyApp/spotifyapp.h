@@ -24,6 +24,12 @@ private slots:
 
     void on_btnAdicionar_clicked();
 
+    void on_lstPlaylist_itemClicked();
+
+    void on_btnRemover_clicked();
+
+    void on_btnLimpaPlaylist_clicked();
+
 private:
     Ui::SpotifyApp *ui;
     QMap<int, QString> searchMap;
@@ -37,6 +43,8 @@ private:
     void search(QString searchString);
 
     void addToPlaylist(QListWidgetItem * item);
+    void removeFromPlaylist(QListWidgetItem * item);
+    void updateAddButton();
 
     QOAuth2AuthorizationCodeFlow spotify;
     bool isGranted;

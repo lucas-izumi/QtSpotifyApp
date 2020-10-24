@@ -1,6 +1,7 @@
 #include "spotifyapp.h"
 #include "ui_spotifyapp.h"
 #include "config.h"
+#include "macros.h"
 #include <QDesktopServices>
 #include <QtNetworkAuth>
 #include <QUrl>
@@ -101,9 +102,14 @@ void SpotifyApp::search(QString searchString)
         {
             QJsonObject obj = value.toObject();
             //qDebug() << "Name: " + obj["name"].toString() + ", URL: " + obj["preview_url"].toString();
-            ui->lstResultadosBusca->addItem(obj["name"].toString());
-            searchMap.insert(cont++, obj["preview_url"].toString());
+            if (obj["preview_url"].toString() != EMPTY_STR)
+            {
+                ui->lstResultadosBusca->addItem(obj["name"].toString());
+                searchMap.insert(cont++, obj["preview_url"].toString());
+            }
         }
+
+        updateAddButton();
 
         reply->deleteLater();
     });
@@ -121,7 +127,10 @@ void SpotifyApp::on_btnBuscar_clicked()
 
 void SpotifyApp::on_btnAdicionar_clicked()
 {
-    addToPlaylist(ui->lstResultadosBusca->currentItem()->clone());
+    if (ui->lstResultadosBusca->currentRow() != INVALID_ROW)
+    {
+        addToPlaylist(ui->lstResultadosBusca->currentItem()->clone());
+    }
 }
 
 void SpotifyApp::addToPlaylist(QListWidgetItem * item)
@@ -129,4 +138,41 @@ void SpotifyApp::addToPlaylist(QListWidgetItem * item)
     ui->lstPlaylist->addItem(item);
     QString element = searchMap[ui->lstResultadosBusca->currentRow()];
     playListUrls.push_back(element);
+}
+
+void SpotifyApp::updateAddButton()
+{
+    bool isEnabled = (searchMap.size() > SIZE_EMPTY) ? true : false;
+    ui->btnAdicionar->setEnabled(isEnabled);
+}
+
+void SpotifyApp::on_lstPlaylist_itemClicked()
+{
+    ui->btnRemover->setEnabled(true);
+}
+
+void SpotifyApp::on_btnRemover_clicked()
+{
+    if (ui->lstPlaylist->currentRow() != INVALID_ROW)
+    {
+        removeFromPlaylist(ui->lstPlaylist->currentItem());
+    }
+}
+
+void SpotifyApp::removeFromPlaylist(QListWidgetItem * item)
+{
+    playListUrls.removeAt(ui->lstPlaylist->currentRow());
+    if (playListUrls.size() == SIZE_EMPTY)
+    {
+        ui->btnRemover->setEnabled(false);
+    }
+
+    delete ui->lstPlaylist->takeItem(ui->lstPlaylist->row(item));
+}
+
+void SpotifyApp::on_btnLimpaPlaylist_clicked()
+{
+    ui->lstPlaylist->clear();
+    playListUrls.clear();
+    ui->btnRemover->setEnabled(false);
 }
