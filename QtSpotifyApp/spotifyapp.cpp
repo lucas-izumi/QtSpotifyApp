@@ -226,6 +226,13 @@ void SpotifyApp::on_sldVolume_sliderMoved(int position)
 
 void SpotifyApp::currentMediaChanged(const QMediaContent &content)
 {
-    //Alterar o texto do topo para o nome da musica atual aqui
-    qDebug() << "Media changed!";
+    int pos = playListUrls.indexOf(content.request().url().toString());
+    if (pos >= 0)
+    {
+        ui->lblMusicaAtual->setText("Tocando: " + ui->lstPlaylist->item(pos)->text());
+    }
+    else
+    {
+        ui->lblMusicaAtual->setText("Spotify Player");
+    }
 }
