@@ -20,6 +20,13 @@ class SpotifyApp : public QMainWindow
 public:
     SpotifyApp(QWidget *parent = nullptr);
     ~SpotifyApp();
+    void connectToSpotify();
+    void saveSettings();
+    void setupConnection();
+    void search(QString searchString);
+    void addToPlaylist(QListWidgetItem * item);
+    void removeFromPlaylist(QListWidgetItem * item);
+    void readSettings();
 
 private slots:
     void on_lstResultadosBusca_itemDoubleClicked(QListWidgetItem *item);
@@ -53,15 +60,9 @@ private:
     QMediaPlayer *mediaPlayer;
     QMediaPlaylist *playlist;
 
-    void setupConnection();
     void granted();
-    void authStatusChanged (QAbstractOAuth::Status status);
-    void connectToSpotify();
+    void authStatusChanged (QAbstractOAuth::Status status);    
     void readConfig();
-    void search(QString searchString);
-
-    void addToPlaylist(QListWidgetItem * item);
-    void removeFromPlaylist(QListWidgetItem * item);
     void updateAddButton();
 
     QOAuth2AuthorizationCodeFlow spotify;
