@@ -11,16 +11,18 @@ CONFIG += c++11
 SOURCES += \
     downloader.cpp \
     main.cpp \
-    spotifyapp.cpp
+    mainwindow.cpp \
+    spotify.cpp
 
 HEADERS += \
     config.h \
     downloader.h \
     macros.h \
-    spotifyapp.h
+    mainwindow.h \
+    spotify.h
 
 FORMS += \
-    spotifyapp.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

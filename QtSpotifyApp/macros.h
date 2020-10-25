@@ -10,4 +10,8 @@
 // Operacoes basicas
 #define EMPTY_STR ""
 
+// Erros
+#define ERR_NO_ERROR 0
+#define ERR_NO_SSL_SUPPORT 100
+
 #endif // MACROS_H
