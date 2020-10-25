@@ -7,6 +7,17 @@ Este projeto utiliza a API do Spotify (https://developer.spotify.com/web-api/) p
 ## Utilização
 É necessário preencher o arquivo **config.ini** com os dados do **Client ID** e **Client ID Shared Key** da sua aplicação do Spotify. Este arquivo deve ficar na raiz do aplicativo compilado. É possível alterar o caminho para este arquivo editando o header `config.h.`
 
+## Pendências, Bugs conhecidos e Melhorias
+- A duração do token recebido após a autenticação é de 1 hora. Não está sendo feito um tratamento caso este token expire, requerendo que o aplicativo tenha que ser reiniciado para atualizar o token quando o tempo estourar. (https://developer.spotify.com/documentation/ios/guides/token-swap-and-refresh/)
+
+- A API do Spotify agrupa os resultados da busca em pacotes com 20 elementos, indicando quantos pacotes desse existem no total. Atualmente a aplicação considera apenas o primeiro pacote de 20 elementos recebido, não realizando uma requisição pelos demais. Adicionar um sistema de paginação de busca e obter todos os resultados retornados é algo a ser considerado para uma próxima versão.
+
+- Foi criada uma classe para download de arquivos (ainda não documentada) para adicionar a possibilidade de baixar uma playlist para ser executada localmente. Para esta versão, porém, o escopo foi reduzido em tocar as músicas da playlist através do link de sample delas.
+
+- Melhorar a lógica dos widgets ativos/inativos para refletir melhor as operações que podem ser realizadas pelo usuário.
+
+- A navegação dos botões de **Próximo** e **Anterior** precisam de correção. Ao clicar nos botões de **Próximo**, quando no ultimo elemento, e **Anterior** (quando no primeiro elemento), enquanto uma playlist está tocando, a execução da música é encerrada. Se o usuário continuar pressionando esses botões, eventualmente, a label que indica a musica em execução atualmente é atualizada (mesmo sem nenhum som estar tocando).
+
 ## Referências
 - https://developer.spotify.com/documentation/general/guides/authorization-guide/
 - https://developer.spotify.com/documentation/web-api/reference/tracks/get-track/
