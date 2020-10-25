@@ -7,11 +7,21 @@
 #include <QtNetworkAuth>
 #include <QUrl>
 
+bool fileExists(QString path)
+{
+    QFileInfo check_file(path);
+    return (check_file.exists() && check_file.isFile()) ? true : false;
+}
+
 SpotifyApp::SpotifyApp(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::SpotifyApp)
 {
     ui->setupUi(this);
+    mediaPlayer = new QMediaPlayer;
+    playlist = new QMediaPlaylist;
+
+    connect(mediaPlayer, SIGNAL(currentMediaChanged(const QMediaContent)), this, SLOT(currentMediaChanged(const QMediaContent)));
 
     readConfig();
     setupConnection();
@@ -180,4 +190,42 @@ void SpotifyApp::on_btnLimpaPlaylist_clicked()
     ui->lstPlaylist->clear();
     playListUrls.clear();
     ui->btnRemover->setEnabled(false);
+}
+
+void SpotifyApp::on_btnPlay_clicked()
+{
+    for(int i = 0; i < ui->lstPlaylist->count(); ++i)
+    {
+        playlist->addMedia(QUrl(playListUrls[i]));
+    }
+
+    mediaPlayer->setPlaylist(playlist);
+    mediaPlayer->setVolume(ui->sldVolume->sliderPosition());
+    mediaPlayer->play();
+}
+
+void SpotifyApp::on_btnStop_clicked()
+{
+    mediaPlayer->stop();
+}
+
+void SpotifyApp::on_btnAnt_clicked()
+{
+    mediaPlayer->playlist()->previous();
+}
+
+void SpotifyApp::on_btnProx_clicked()
+{
+    mediaPlayer->playlist()->next();
+}
+
+void SpotifyApp::on_sldVolume_sliderMoved(int position)
+{
+    mediaPlayer->setVolume(position);
+}
+
+void SpotifyApp::currentMediaChanged(const QMediaContent &content)
+{
+    //Alterar o texto do topo para o nome da musica atual aqui
+    qDebug() << "Media changed!";
 }

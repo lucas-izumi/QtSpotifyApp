@@ -17,11 +17,11 @@ void Downloader::startDownload(QString filename, QString url)
     QUrl requestURL (url);
     request.setUrl(requestURL);
     reply = manager->get(request);
-    file = new QFile(filename + ".mp3");
+    file = new QFile(filename);
 
     if (!file->open(QIODevice::WriteOnly))
     {
-        qDebug() << "Erro ao criar arquivo " + filename + ".mp3";
+        qDebug() << "Erro ao criar arquivo " + filename;
         return;
     }
 

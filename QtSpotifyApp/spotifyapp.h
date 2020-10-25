@@ -4,10 +4,14 @@
 #include <QMainWindow>
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QListWidgetItem>
+#include <QMediaPlaylist>
+#include <QMediaPlayer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class SpotifyApp; }
 QT_END_NAMESPACE
+
+bool fileExists(QString path);
 
 class SpotifyApp : public QMainWindow
 {
@@ -30,10 +34,24 @@ private slots:
 
     void on_btnLimpaPlaylist_clicked();
 
+    void on_btnPlay_clicked();
+
+    void on_btnStop_clicked();
+
+    void on_btnAnt_clicked();
+
+    void on_btnProx_clicked();
+
+    void on_sldVolume_sliderMoved(int position);
+
+    void currentMediaChanged(const QMediaContent &content);
+
 private:
     Ui::SpotifyApp *ui;
     QMap<int, QString> searchMap;
     QVector<QString> playListUrls;
+    QMediaPlayer *mediaPlayer;
+    QMediaPlaylist *playlist;
 
     void setupConnection();
     void granted();
