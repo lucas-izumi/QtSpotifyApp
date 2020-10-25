@@ -25,6 +25,7 @@ SpotifyApp::SpotifyApp(QWidget *parent)
 
     readConfig();
     readSettings();
+    loadPlaylist();
     setupConnection();
     connectToSpotify();
 }
@@ -50,6 +51,31 @@ void SpotifyApp::readSettings()
     int vol = settings.value("volume", 50).toInt();
     mediaPlayer->setVolume(vol);
     ui->sldVolume->setSliderPosition(vol);
+}
+
+void SpotifyApp::savePlaylist()
+{
+    QSettings settings(PLAYLIST_FILE, QSettings::IniFormat);
+    settings.beginGroup("Musicas");
+    int playlistSize = playListUrls.size();
+
+    for (int i=0; i < playlistSize; ++i)
+    {
+        settings.setValue(ui->lstPlaylist->item(i)->text(),
+                          playListUrls[i]);
+    }
+}
+
+void SpotifyApp::loadPlaylist()
+{
+    QSettings settings(PLAYLIST_FILE, QSettings::IniFormat);
+    settings.beginGroup("Musicas");
+    QStringList keys = settings.allKeys();
+    for (int i=0; i<keys.size(); ++i)
+    {
+        playListUrls.push_back(settings.value(keys[i]).toString());
+        ui->lstPlaylist->addItem(keys[i]);
+    }
 }
 
 void SpotifyApp::setupConnection()
@@ -253,4 +279,9 @@ void SpotifyApp::currentMediaChanged(const QMediaContent &content)
     {
         ui->lblMusicaAtual->setText("Spotify Player");
     }
+}
+
+void SpotifyApp::on_btnSalvarPlaylist_clicked()
+{
+    savePlaylist();
 }

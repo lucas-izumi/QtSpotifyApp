@@ -27,6 +27,8 @@ public:
     void addToPlaylist(QListWidgetItem * item);
     void removeFromPlaylist(QListWidgetItem * item);
     void readSettings();
+    void savePlaylist();
+    void loadPlaylist();
 
 private slots:
     void on_lstResultadosBusca_itemDoubleClicked(QListWidgetItem *item);
@@ -52,6 +54,8 @@ private slots:
     void on_sldVolume_sliderMoved(int position);
 
     void currentMediaChanged(const QMediaContent &content);
+
+    void on_btnSalvarPlaylist_clicked();
 
 private:
     Ui::SpotifyApp *ui;
